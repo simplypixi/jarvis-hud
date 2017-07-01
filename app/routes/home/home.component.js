@@ -4,28 +4,17 @@ import { FormattedMessage } from 'react-intl';
 import envConfig from 'env-config';
 
 import messages from './home.messages';
-import { MaintainerList } from './maintainerList/maintainerList.component';
 import { LanguageSelector } from './languageSelector/languageSelector.component';
 
+import Camera from '../camera/camera.container';
 
 export class Home extends PureComponent {
   static propTypes = {
     items: PropTypes.object,
     language: PropTypes.string.isRequired,
-    fetchMaintainers: PropTypes.func.isRequired,
     setLanguage: PropTypes.func.isRequired,
     router: PropTypes.object.isRequired,
   };
-
-  componentWillMount() {
-    this.props.fetchMaintainers(this.props.language);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language) {
-      this.props.fetchMaintainers(nextProps.language);
-    }
-  }
 
   render() {
     return (
@@ -34,14 +23,7 @@ export class Home extends PureComponent {
           title="Homepage"
         />
 
-        <h1 className="home__title">
-          <i className="home__title-logo" />
-          <FormattedMessage {...messages.welcome} />
-        </h1>
-
-        <div>Environment: {envConfig.name}</div>
-
-        <MaintainerList items={this.props.items} />
+        <Camera />
 
         <LanguageSelector
           language={this.props.language}

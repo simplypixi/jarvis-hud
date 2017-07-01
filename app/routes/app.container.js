@@ -6,7 +6,6 @@ import { App } from './app.component';
 import { selectLocalesLanguage } from '../modules/locales/locales.selectors';
 import { LocalesActions } from '../modules/locales/locales.redux';
 
-
 const mapStateToProps = createStructuredSelector({
   language: selectLocalesLanguage,
 });
