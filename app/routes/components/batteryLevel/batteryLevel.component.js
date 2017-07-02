@@ -5,16 +5,26 @@ import Battery from './batteryLevel.d3';
 
 export class BatteryLevel extends PureComponent {
   static propTypes = {
-    level: PropTypes.number,
+    level: PropTypes.number.isRequired,
+    fetchBattery: PropTypes.func.isRequired,
   };
+
+  componentWillMount() {
+    this.props.fetchBattery();
+    this.cancelInterval = setInterval(this.props.fetchBattery, 5000);
+  }
 
   componentDidMount() {
     this.battery = new Battery(this.canvas);
     this.battery.render();
   }
 
-  componentWillReceiveProps({level}){
-    this.battery.update();
+  componentWillReceiveProps({ level }){
+    this.battery.render(level * 100);
+  }
+
+  componentWillUnmount() {
+    this.cancelInterval();
   }
 
   render() {
