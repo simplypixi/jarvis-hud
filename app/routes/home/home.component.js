@@ -7,6 +7,7 @@ import messages from './home.messages';
 import { LanguageSelector } from './languageSelector/languageSelector.component';
 
 import Camera from '../camera/camera.container';
+import { BatteryLevel } from '../components/batteryLevel/batteryLevel.component';
 
 export class Home extends PureComponent {
   static propTypes = {
@@ -24,6 +25,7 @@ export class Home extends PureComponent {
         />
 
         <Camera />
+        <BatteryLevel />
 
         <LanguageSelector
           language={this.props.language}
