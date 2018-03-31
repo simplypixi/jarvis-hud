@@ -21,10 +21,6 @@ export default (
       {routes}
     </Route>
 
-    <Route path="/:lang">
-      {routes}
-    </Route>
-
     <Route path="*">
       {NotFoundRoute}
     </Route>

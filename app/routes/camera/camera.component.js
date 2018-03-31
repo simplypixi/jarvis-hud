@@ -7,18 +7,20 @@ export class Camera extends PureComponent {
 
   constructor() {
     super(...arguments);
+
+    this.bindVideoStream = this.bindVideoStream.bind(this);
   }
 
   componentWillMount() {
     const self = this;
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-        self.bindVideoStream(window.URL.createObjectURL(stream))
+      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        this.bindVideoStream(window.URL.createObjectURL(stream))
       });
     }
   }
 
-  bindVideoStream = (stream) => {
+  bindVideoStream(stream) {
     this.video.src = stream;
     this.video.play();
   }

@@ -100,7 +100,6 @@ if (!window.Intl) {
   }))
     .then(() => Promise.all([
       require('intl/locale-data/jsonp/en.js'),
-      require('intl/locale-data/jsonp/de.js'),
     ]))
     .then(() => render())
     .catch((err) => {

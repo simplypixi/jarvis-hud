@@ -4,34 +4,25 @@ import { FormattedMessage } from 'react-intl';
 import envConfig from 'env-config';
 
 import messages from './home.messages';
-import { LanguageSelector } from './languageSelector/languageSelector.component';
 
 import Camera from '../camera/camera.container';
-import BatteryLevel from '../components/batteryLevel/batteryLevel.container';
+import HUD from '../components/hud/hud.container.js';
 
 export class Home extends PureComponent {
   static propTypes = {
     items: PropTypes.object,
-    language: PropTypes.string.isRequired,
-    setLanguage: PropTypes.func.isRequired,
     router: PropTypes.object.isRequired,
   };
 
   render() {
     return (
-      <div className="home">
+      <div className="jarvis">
         <Helmet
-          title="Homepage"
+          title="Jarvis"
         />
 
         <Camera />
-        <BatteryLevel />
-
-        <LanguageSelector
-          language={this.props.language}
-          setLanguage={this.props.setLanguage}
-          router={this.props.router}
-        />
+        <HUD />
       </div>
     );
   }
