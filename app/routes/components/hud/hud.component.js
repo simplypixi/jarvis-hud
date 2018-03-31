@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { HUDContainer } from './hud.styles';
 
 import Scene from './objects/scene';
 
@@ -45,10 +46,7 @@ export class HUD extends PureComponent {
 
   render() {
     return (
-      <div
-        className="hud"
-        ref={this.bindContainer}
-      ></div>
+      <HUDContainer innerRef={this.bindContainer} />
     );
   }
 }

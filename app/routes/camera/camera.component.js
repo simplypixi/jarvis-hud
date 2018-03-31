@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import { CameraContainer, CameraStream } from './camera.styles';
+
 export class Camera extends PureComponent {
   static propTypes = {};
 
@@ -34,11 +36,9 @@ export class Camera extends PureComponent {
 
   render() {
     return (
-      <div className="camera">
-        <video
-          className="camera-stream"
-          ref={(video) => {this.video = video;}} />
-      </div>
+      <CameraContainer>
+        <CameraStream innerRef={(video) => {this.video = video;}} />
+      </CameraContainer>
     );
   }
 };

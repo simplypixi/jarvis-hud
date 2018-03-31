@@ -1,28 +1,32 @@
-import React from 'react';
-import { Route } from 'react-router';
+import React, { Component } from 'react';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { DEFAULT_LOCALE } from '../modules/locales/locales.redux';
 
 import App from './app.container';
-import HomeRoute from './home';
-import NotFoundRoute from './notFound';
+import { Home } from './home';
+import { NotFound } from './notFound';
 
-const routes = (
-  <Route>
-    {HomeRoute}
+export class RootContainer extends Component {
+  render() {
+    return (
+      <Switch>
+        <Route exact path="/" render={() => <Redirect to={DEFAULT_LOCALE} />} />
 
-    <Route path="404">
-      {NotFoundRoute}
-    </Route>
-  </Route>
-);
 
-export default (
-  <Route component={App}>
-    <Route path="/">
-      {routes}
-    </Route>
+        <Route exact path="/404" component={NotFound} />
 
-    <Route path="*">
-      {NotFoundRoute}
-    </Route>
-  </Route>
-);
+        <Route path="/:lang">
+          <App>
+            <Switch>
+              <Route exact path="/:lang" component={Home} />
+
+              <Route component={NotFound} />
+            </Switch>
+          </App>
+        </Route>
+      </Switch>
+    );
+  }
+}
+
+export default withRouter(RootContainer);

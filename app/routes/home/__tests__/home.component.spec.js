@@ -2,19 +2,20 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import { spy } from 'sinon';
-import { FormattedMessage } from 'react-intl';
-import Helmet from 'react-helmet';
+import { fromJS } from 'immutable';
 
 import { Home } from '../home.component';
-import messages from '../home.messages';
+
 
 describe('Home: Component', () => {
   const defaultProps = {
     fetchMaintainers: () => {},
-    items: [1, 2, 3],
+    items: fromJS([{ name: 'name-1' }, { name: 'name-2' }, { name: 'name-3' }]),
     language: 'en',
     setLanguage: () => {},
-    router: {},
+    location: {},
+    match: {},
+    history: { push: () => {} },
   };
 
   const component = (props) => (
@@ -23,28 +24,23 @@ describe('Home: Component', () => {
 
   it('should render Home root', () => {
     const wrapper = shallow(component({}));
-    expect(wrapper.find('.home')).to.have.length(1);
+    global.expect(wrapper).toMatchSnapshot();
   });
 
-  it('should render <Helmet/>', () => {
-    const wrapper = shallow(component({}));
-    expect(wrapper.find(Helmet)).to.have.length(1);
+  it('should dispatch fetchMaintainers action on mount', () => {
+    const fetchMaintainers = spy();
+    shallow(component({ fetchMaintainers }));
+
+    expect(fetchMaintainers).to.have.been.calledWith(defaultProps.language);
   });
 
-  it('should pass title prop to <Helmet/>', () => {
-    const wrapper = shallow(component({}));
-    const helmetProps = wrapper.find(Helmet).props();
+  it('should dispatch fetchMaintainers action on language change', () => {
+    const fetchMaintainers = spy();
+    const newLanguage = 'de';
+    const wrapper = shallow(component({ fetchMaintainers, language: 'en' }));
+    fetchMaintainers.resetHistory();
+    wrapper.setProps({ language: newLanguage });
 
-    expect(helmetProps.title).to.be.a('string');
-  });
-
-  it('should render .home__title', () => {
-    const wrapper = shallow(component({}));
-    expect(wrapper.find('.home__title')).to.have.length(1);
-  });
-
-  it('should render welcome message inside .home__title', () => {
-    const wrapper = shallow(component({}));
-    expect(wrapper.find('.home__title').find(FormattedMessage).prop('id')).to.equal(messages.welcome.id);
+    expect(fetchMaintainers).to.have.been.calledWith(newLanguage);
   });
 });

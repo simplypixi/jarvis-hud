@@ -1,6 +1,4 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-
-import { get } from '../api/api.sagas';
 import { BatteryTypes, BatteryActions } from './battery.redux';
 
 

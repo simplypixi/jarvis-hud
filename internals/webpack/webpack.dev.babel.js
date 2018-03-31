@@ -7,7 +7,6 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const cheerio = require('cheerio');
 const logger = require('../../server/logger');
@@ -16,10 +15,6 @@ const dllPlugin = pkg.dllPlugin;
 /* eslint-enable import/no-extraneous-dependencies */
 
 const plugins = [
-  new CopyWebpackPlugin([{
-    from: path.join(process.cwd(), 'app', 'fixtures'),
-    to: 'fixtures',
-  }]),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
   new HtmlWebpackPlugin({
@@ -29,19 +24,21 @@ const plugins = [
   }),
   new CircularDependencyPlugin({
     exclude: /a\.js|node_modules/,
-    failOnError: false, // show a warning when there is a circular dependency
+    failOnError: false,
   }),
 ];
 
 module.exports = require('./webpack.base.babel')({
   // Add hot reloading in development
-  entry: [
-    // Necessary for hot reloading with IE
-    'eventsource-polyfill',
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client',
-    path.join(process.cwd(), 'app/main.js'), // Start with app/main.js
-  ],
+  entry: {
+    main: [
+      // Necessary for hot reloading with IE
+      'eventsource-polyfill',
+      'webpack-hot-middleware/client',
+      path.join(process.cwd(), 'app/main.js'),
+    ],
+    support: path.join(process.cwd(), 'app/support.js'),
+  },
 
   // Don't use hashes in dev mode for better performance
   output: {
@@ -52,21 +49,14 @@ module.exports = require('./webpack.base.babel')({
   // Add development plugins
   plugins: dependencyHandlers().concat(plugins), // eslint-disable-line no-use-before-define
 
-  // Tell babel that we want to hot-reload
-  babelQuery: {
-    // require.resolve solves the issue of relative presets when dealing with
-    // locally linked packages. This is an issue with babel and webpack.
-    // See https://github.com/babel/babel-loader/issues/149 and
-    // https://github.com/webpack/webpack/issues/1866
-    presets: ['babel-preset-react-hmre'].map(require.resolve),
-  },
-
   // Emit a source map for easier debugging
   devtool: 'cheap-module-eval-source-map',
 
   performance: {
     hints: false,
   },
+
+  styleHMR: true,
 });
 
 /**
@@ -148,11 +138,12 @@ function templateContent() {
 
   if (!dllPlugin) { return html; }
 
-  const doc = cheerio(html);
-  const body = doc.find('body');
+  const $ = cheerio.load(html);
+
+  const body = $('body');
   const dllNames = !dllPlugin.dlls ? ['reactBoilerplateDeps'] : Object.keys(dllPlugin.dlls);
 
   dllNames.forEach((dllName) => body.append(`<script data-dll='true' src='/${dllName}.dll.js'></script>`));
 
-  return doc.toString();
+  return $.html();
 }

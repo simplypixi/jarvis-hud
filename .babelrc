@@ -15,6 +15,16 @@
     "react-hot-loader/babel"
   ],
   "env": {
+    "development": {
+      "plugins": [
+        [
+          "babel-plugin-styled-components",
+          {
+            "minify": false
+          }
+        ]
+      ]
+    },
     "production": {
       "only": [
         "app"
@@ -22,19 +32,15 @@
       "plugins": [
         "transform-react-remove-prop-types",
         "transform-react-constant-elements",
-        "transform-react-inline-elements"
+        "transform-react-inline-elements",
+        "babel-plugin-styled-components"
       ]
     },
     "test": {
       "plugins": [
         "transform-es2015-modules-commonjs",
         "transform-es2015-modules-commonjs",
-        "dynamic-import-node",
-        ["istanbul", {
-          "exclude": [
-            "**/*.spec.js"
-          ]
-        }]
+        "dynamic-import-node"
       ]
     }
   }

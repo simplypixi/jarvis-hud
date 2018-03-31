@@ -8,7 +8,27 @@ const webpack = require('webpack');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const WebpackAppversionPlugin = require('webpack-appversion-plugin');
 const SpritesmithPlugin = require('webpack-spritesmith');
+const fs = require('fs');
 /* eslint-enable import/no-extraneous-dependencies */
+/* eslint-enable import/no-extraneous-dependencies */
+
+const LOCAL_ENV_CONFIG_NAME = 'local-env-config';
+
+const appDirPath = path.join(process.cwd(), 'app');
+const envConfigDirPath = path.join(appDirPath, 'environment');
+const localEnvConfigPath = path.join(envConfigDirPath, 'local.js');
+
+const externals = {};
+const alias = {
+  'env-config': path.join(envConfigDirPath, `${process.env.ENV_CONFIG || 'development'}.js`),
+  'report-error': path.join(process.cwd(), 'app', 'utils', 'reportError.js'),
+};
+
+if (fs.existsSync(localEnvConfigPath)) {
+  alias[LOCAL_ENV_CONFIG_NAME] = localEnvConfigPath;
+} else {
+  externals[LOCAL_ENV_CONFIG_NAME] = JSON.stringify({});
+}
 
 const buildSpritePlugin = (name) => new SpritesmithPlugin({
   retina: '-2x',
@@ -18,7 +38,7 @@ const buildSpritePlugin = (name) => new SpritesmithPlugin({
   },
   target: {
     image: path.join(process.cwd(), `app/images/generated/${name}-sprite.png`),
-    css: path.join(process.cwd(), `app/styles/generated/${name}-sprites.scss`),
+    css: path.join(process.cwd(), `app/images/generated/${name}-sprite.json`),
   },
   apiOptions: {
     cssImageRef: `images/generated/${name}-sprite.png`,
@@ -40,6 +60,9 @@ module.exports = (options) => {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+        options: {
+          cacheDirectory: true,
+        },
         query: options.babelQuery,
       }, {
         // Do not transform vendor's CSS with CSS-modules
@@ -49,32 +72,39 @@ module.exports = (options) => {
         // So, no need for ExtractTextPlugin here.
         test: /\.css$/,
         include: /node_modules/,
-        loaders: ['style-loader', 'css-loader'],
-      }, {
-        test: /\.scss$/,
-        use: [{
+        loaders: [{
           loader: 'style-loader',
+          options: {
+            hmr: options.styleHMR,
+          },
         }, {
           loader: 'css-loader',
-        }, {
-          loader: 'sass-loader',
         }],
       }, {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file-loader',
       }, {
         test: /\.(jpg|png|gif)$/,
-        loaders: [
-          'file-loader',
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              query: {
+                name: '[name].[ext]',
+              },
+            },
+          },
           {
             loader: 'image-webpack-loader',
-            query: {
-              progressive: true,
-              optimizationLevel: 7,
-              interlaced: false,
-              pngquant: {
-                quality: '65-90',
-                speed: 4,
+            options: {
+              query: {
+                progressive: true,
+                optimizationLevel: 7,
+                interlaced: false,
+                pngquant: {
+                  quality: '65-90',
+                  speed: 4,
+                },
               },
             },
           },
@@ -97,10 +127,6 @@ module.exports = (options) => {
       new FaviconsWebpackPlugin(path.join(process.cwd(), 'app', 'images', 'favicon.png')),
       buildSpritePlugin('mobile'),
       buildSpritePlugin('desktop'),
-      new webpack.ProvidePlugin({
-        // make fetch available
-        fetch: 'exports-loader?self.fetch!whatwg-fetch',
-      }),
 
       // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
       // inside your code for any environment checks; UglifyJS will automatically
@@ -113,9 +139,7 @@ module.exports = (options) => {
       new webpack.NamedModulesPlugin(),
     ]),
     resolve: {
-      alias: {
-        'env-config': path.join(process.cwd(), 'app', 'environment', `${process.env.NODE_ENV}.js`),
-      },
+      alias: alias,
       modules: ['app', 'node_modules'],
       extensions: [
         '.js',
@@ -128,12 +152,13 @@ module.exports = (options) => {
         'main',
       ],
     },
+    externals: externals,
     devtool: options.devtool,
     target: 'web',
     performance: options.performance || {},
   };
 
-  if (process.env.SHOW_VERSION) {
+  if (process.env.SHOW_VERSION === 'true') {
     webpackConfig.plugins.push(
       new WebpackAppversionPlugin({
         entries: ['main'],
