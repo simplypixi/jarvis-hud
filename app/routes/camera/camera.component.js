@@ -1,9 +1,7 @@
-import React, {PureComponent, PropTypes} from 'react';
+import React, { PureComponent } from 'react';
 
 export class Camera extends PureComponent {
-  static propTypes = {
-
-  };
+  static propTypes = {};
 
   constructor() {
     super(...arguments);
@@ -16,22 +14,22 @@ export class Camera extends PureComponent {
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode:{ideal: "environment"},
+          facingMode: { ideal: 'environment' },
         }
       }).then((stream) => {
-        this.bindVideoStream(window.URL.createObjectURL(stream))
+        this.bindVideoStream(window.URL.createObjectURL(stream));
       });
     }
-  }
-
-  bindVideoStream(stream) {
-    this.video.src = stream;
-    this.video.play();
   }
 
   componentWillUnmount() {
     this.video.stop();
     this.video.src = null;
+  }
+
+  bindVideoStream(stream) {
+    this.video.src = stream;
+    this.video.play();
   }
 
   render() {
@@ -41,6 +39,6 @@ export class Camera extends PureComponent {
           className="camera-stream"
           ref={(video) => {this.video = video;}} />
       </div>
-    )
+    );
   }
 };

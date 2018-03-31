@@ -24,7 +24,7 @@ export class App extends PureComponent {
         />
 
         <IntlProvider
-          locale='en'
+          locale="en"
           messages={translationMessages.en}
         >
           {React.Children.only(this.props.children)}

@@ -1,5 +1,5 @@
 import Stats from 'stats.js';
-import {Application} from 'pixi.js';
+import { Application } from 'pixi.js';
 
 import Battery from './battery';
 
