@@ -6,7 +6,7 @@ import envConfig from 'env-config';
 import messages from './home.messages';
 
 import Camera from '../camera/camera.container';
-import HUD from '../components/hud/hud.container.js';
+import HUD from '../components/hud/hud.container';
 
 export class Home extends PureComponent {
   static propTypes = {

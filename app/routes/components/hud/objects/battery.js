@@ -1,5 +1,5 @@
 import { range, last } from 'lodash';
-import {Sprite, Graphics, Container} from 'pixi.js';
+import { Sprite, Graphics, Container } from 'pixi.js';
 
 const LEVEL_DIFF = 10;
 const LEVEL_RANGE = [0, 100];
@@ -12,7 +12,7 @@ const calcBarHeight = (i) => BAR_HEIGHT * ((FULL_RANGE.length - i) / FULL_RANGE.
 const calcBarWidth = (i) => i * 2 * BAR_WIDTH;
 
 export default class Battery extends Container {
-  constructor(props) {
+  constructor() {
     super();
 
     this.initBars();
@@ -31,7 +31,7 @@ export default class Battery extends Container {
       bar.endFill();
 
       barSprite.props = {
-        level: batteryLevel
+        level: batteryLevel,
       };
       barSprite.addChild(bar);
       return barSprite;
@@ -43,6 +43,6 @@ export default class Battery extends Container {
   updateLevel(newBatteryLevel) {
     this.bars.forEach((bar) => {
       bar.renderable = bar.props.level <= newBatteryLevel;
-    }); 
+    });
   };
 }

@@ -6,7 +6,6 @@ import Helmet from 'react-helmet';
 import { IntlProvider } from 'react-intl';
 
 import { translationMessages } from '../../i18n';
-import { DEFAULT_LOCALE } from '../../modules/locales/locales.redux';
 import { App } from '../app.component';
 
 
@@ -58,54 +57,5 @@ describe('App: Component', () => {
   it('should render <IntlProvider/>', () => {
     const wrapper = shallow(component({}));
     expect(wrapper.find(IntlProvider)).to.have.length(1);
-  });
-
-  it('should pass props to <IntlProvider/>', () => {
-    const wrapper = shallow(component({}));
-    const intlProps = wrapper.find(IntlProvider).props();
-
-    expect(intlProps.locale).to.equal(defaultProps.language);
-    expect(intlProps.messages).to.equal(translationMessages[defaultProps.language]);
-  });
-
-  it('should render children inside <IntlProvider/>', () => {
-    const wrapper = shallow(component({}));
-    expect(wrapper.find(IntlProvider).contains(children)).to.be.true;
-  });
-
-  it('should redirect to /404 when given locale doesn\'t exist', () => {
-    const router = {
-      params: {
-        lang: 'non-existing-locale',
-      },
-      push: spy(),
-    };
-
-    mount(component({ router }));
-    expect(router.push.firstCall.args[0]).to.equal('/404');
-  });
-
-  it('should set DEFAULT_LOCALE when no lang param is given', () => {
-    const setLanguage = spy();
-    const router = {
-      params: {},
-      push: spy(),
-    };
-
-    mount(component({ router, setLanguage }));
-    expect(setLanguage.firstCall.args[0]).to.equal(DEFAULT_LOCALE);
-  });
-
-  it('should set proper language from param', () => {
-    const setLanguage = spy();
-    const router = {
-      params: {
-        lang: 'de',
-      },
-      push: spy(),
-    };
-
-    mount(component({ router, setLanguage }));
-    expect(setLanguage.firstCall.args[0]).to.equal('de');
   });
 });

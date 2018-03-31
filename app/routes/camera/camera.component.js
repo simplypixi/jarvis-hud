@@ -14,7 +14,11 @@ export class Camera extends PureComponent {
   componentWillMount() {
     const self = this;
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode:{ideal: "environment"},
+        }
+      }).then((stream) => {
         this.bindVideoStream(window.URL.createObjectURL(stream))
       });
     }
