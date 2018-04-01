@@ -9,22 +9,14 @@ import { NotFound } from './notFound';
 export class RootContainer extends Component {
   render() {
     return (
+      <App>
       <Switch>
-        <Route exact path="/" render={() => <Redirect to={DEFAULT_LOCALE} />} />
-
+        <Route exact path="/" component={Home}/>
 
         <Route exact path="/404" component={NotFound} />
 
-        <Route path="/:lang">
-          <App>
-            <Switch>
-              <Route exact path="/:lang" component={Home} />
-
-              <Route component={NotFound} />
-            </Switch>
-          </App>
-        </Route>
       </Switch>
+      </App>
     );
   }
 }

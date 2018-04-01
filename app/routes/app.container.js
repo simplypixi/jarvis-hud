@@ -6,17 +6,10 @@ import { hot } from 'react-hot-loader';
 import { compose } from 'ramda';
 
 import { App } from './app.component';
-import { selectLocalesLanguage } from '../modules/locales/locales.selectors';
-import { LocalesActions } from '../modules/locales/locales.redux';
 
+const mapStateToProps = createStructuredSelector({});
 
-const mapStateToProps = createStructuredSelector({
-  language: selectLocalesLanguage,
-});
-
-export const mapDispatchToProps = (dispatch) => bindActionCreators({
-  setLanguage: LocalesActions.setLanguage,
-}, dispatch);
+export const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
 
 export default compose(
   hot(module),
