@@ -76,6 +76,7 @@
     "immutable": "3.8.2",
     "intl": "1.2.5",
     "ip": "1.1.5",
+    "lodash": "^4.17.5",
     "lodash.defaultsdeep": "^4.6.0",
     "lodash.pullall": "^4.2.0",
     "lodash.uniq": "^4.5.0",

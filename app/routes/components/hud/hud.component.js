@@ -24,7 +24,7 @@ export class HUD extends PureComponent {
     this.initScene();
   }
 
-  componentWillReceiveProps({ level }){
+  componentWillReceiveProps({ level }) {
     if (level !== this.props) {
       this.scene.updateBatteryLevel(level * 100);
     }
@@ -40,7 +40,7 @@ export class HUD extends PureComponent {
 
   initScene() {
     this.scene = new Scene({
-      container: this.container
+      container: this.container,
     });
   }
 

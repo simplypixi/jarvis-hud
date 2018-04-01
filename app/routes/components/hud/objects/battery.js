@@ -44,5 +44,5 @@ export default class Battery extends Container {
     this.bars.forEach((bar) => {
       bar.renderable = bar.props.level <= newBatteryLevel;
     });
-  };
+  }
 }

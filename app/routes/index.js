@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-import { DEFAULT_LOCALE } from '../modules/locales/locales.redux';
 
 import App from './app.container';
 import { Home } from './home';
@@ -10,12 +9,12 @@ export class RootContainer extends Component {
   render() {
     return (
       <App>
-      <Switch>
-        <Route exact path="/" component={Home}/>
+        <Switch>
+          <Route exact path="/" component={Home} />
 
-        <Route exact path="/404" component={NotFound} />
+          <Route exact path="/404" component={NotFound} />
 
-      </Switch>
+        </Switch>
       </App>
     );
   }

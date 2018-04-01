@@ -23,7 +23,7 @@ export const errorHandler = (state, { error }) => console.log('ERROR', e);
 
 export const HANDLERS = {
   [BatteryTypes.FETCH_SUCCESS]: successHandler,
-  [BatteryTypes.FETCH_ERROR]: errorHandler
+  [BatteryTypes.FETCH_ERROR]: errorHandler,
 };
 
 export const reducer = createReducer(INITIAL_STATE, HANDLERS);
