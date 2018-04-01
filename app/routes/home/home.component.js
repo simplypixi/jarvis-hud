@@ -14,11 +14,8 @@ export class Home extends PureComponent {
 
   render() {
     return (
-      <div className="jarvis">
-        <Helmet
-          title="Jarvis"
-        />
-
+      <div>
+        <Helmet title="Jarvis" />
         <Camera />
         <HUD />
       </div>

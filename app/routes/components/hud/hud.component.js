@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import Jarvis from '../../../jarvis';
 import { HUDContainer } from './hud.styles';
 
 import Scene from './objects/scene';
@@ -13,11 +15,13 @@ export class HUD extends PureComponent {
   constructor() {
     super();
     this.bindContainer = this.bindContainer.bind(this);
+    this.jarvis = new Jarvis();
   }
 
   componentWillMount() {
     this.props.fetchBattery();
     this.cancelInterval = setInterval(this.props.fetchBattery, 5000);
+    this.jarvis.run();
   }
 
   componentDidMount() {
