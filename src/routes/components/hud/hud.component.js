@@ -21,6 +21,7 @@ export class HUD extends PureComponent {
   componentDidMount() {
     this.initScene();
     this.props.startWatchingBattery();
+    this.scene.updateBatteryLevel(this.props.level * 100);
   }
 
   componentDidUpdate({ level }) {
