@@ -1,5 +1,7 @@
+import EVENTS from '../events';
+
 export default class Searching {
   setup(jarvis) {
-    console.log('Searching initialized')
+    jarvis.emit(EVENTS.INIT, 'I\'m able to find information!');
   }
 }

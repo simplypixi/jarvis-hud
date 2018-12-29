@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "event-emitter": "^0.3.5",
     "history": "^4.7.2",
     "immutable": "^4.0.0-rc.12",
+    "keymirror": "^0.1.1",
     "normalize.css": "^8.0.1",
     "pixi.js": "^4.8.4",
     "ramda": "^0.26.1",

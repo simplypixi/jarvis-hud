@@ -1,7 +1,9 @@
+import EventEmitter from 'event-emitter';
 import Searching from './searching';
 import Speech from './speech';
+import EVENTS from './events';
 
-const OPERATIONS_CHECK_INTERVAL = 200;
+const OPERATIONS_CHECK_INTERVAL = 2000;
 
 const baseModules = [
   Searching,
@@ -15,13 +17,15 @@ class Jarvis {
   _modules = {};
   _operationsQueue = [];
   _operationsQueueChecker = null;
-
+  _emitter = new EventEmitter();
+  
   config = {};
 
   constructor(config) {
     this.config = config;
 
     this._operationsQueueChecker = setInterval(this._resolveOperations, OPERATIONS_CHECK_INTERVAL);
+    this._bindListeners();
   }
   
   _addModule = (Module) => {
@@ -39,10 +43,19 @@ class Jarvis {
   }
   
   _resolveOperations = async () => {
+    console.log('*** Resolving queued operations ***')
     for (let index = 0; index < this._operationsQueue.length; index++) {
       await Promise.resolve(this._operationsQueue[index]);
     }
   }
+
+  _bindListeners = () => {
+    this.on(EVENTS.INIT, (message) => console.info(`*** ${message} ***`));
+  }
+
+  on = this._emitter.on;
+  off = this._emitter.off;
+  emit = this._emitter.emit;
 
   setup = (config) => {
     this.config = config;

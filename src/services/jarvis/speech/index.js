@@ -1,5 +1,7 @@
+import EVENTS from '../events';
+
 export default class Speech {
-  setup(jarvis) {
-    console.log('Speech initialized')
+  setup = (jarvis) => {
+    jarvis.emit(EVENTS.INIT, 'I\'m able to recognize speaking!');
   }
 }
