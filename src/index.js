@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router } from "react-router-dom";
+import { Router } from 'react-router-dom';
 import 'normalize.css/normalize.css';
+import { GlobalStyle } from './theme/global';
 import NextApp from './routes';
 import * as serviceWorker from './serviceWorker';
 import { store, browserHistory } from './services/store';
@@ -27,7 +28,10 @@ const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       <Router history={browserHistory}>
-        <NextApp />
+        <>
+          <GlobalStyle />
+          <NextApp />
+        </>
       </Router>
     </Provider>,
     document.getElementById('root')

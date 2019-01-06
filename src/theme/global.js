@@ -1,7 +1,6 @@
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-// eslint-disable-next-line
-injectGlobal`
+export const GlobalStyle = createGlobalStyle`
   html.unsupported {
     .unsupported-page {
       display: block !important;
@@ -10,5 +9,9 @@ injectGlobal`
     #root {
       display: none;
     }
+  }
+
+  body {
+    overflow: hidden;
   }
 `;
